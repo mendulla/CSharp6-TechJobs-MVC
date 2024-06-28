@@ -44,7 +44,23 @@ public class ListController : Controller
     // TODO #2 - Complete the Jobs action method
     public IActionResult Jobs(string column, string value)
     {
-        return View();
+        List<Job> jobs; // Declare a list to store the job results
+        string title; // Declare a string to store the title for the view
+
+        // Check if 'column' is null, empty, or "all"
+        if (string.IsNullOrEmpty(column) || column.Equals("all", StringComparison.OrdinalIgnoreCase))
+        {
+            jobs = JobData.FindAll(); // Retrieve all jobs
+            title = "All Jobs"; // Set the title for the view
+        }
+        else
+        {
+            jobs = JobData.FindByColumnAndValue(column, value); // Retrieve jobs based on the selected column and value
+            title = $"Jobs with {ColumnChoices[column]}: {value}"; // Set the title to include the selected column and value
+        }
+
+        ViewBag.jobs = jobs; // Pass the jobs list to the view
+        ViewBag.title = title; // Pass the title to the view
+        return View(); // Return the view to be rendered
     }
 }
-
